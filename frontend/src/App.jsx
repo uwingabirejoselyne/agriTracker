@@ -1,12 +1,12 @@
 import './App.css'
+import { Routes,Route } from 'react-router-dom'
+import Login from './pages/Login'
 
 function App() {
   return (
-    <>
-  <h1 className=" flex flex-col justify-center items-center text-6xl mx-5 font-bold text-center underline text-blue-500">
-    Hello world!
-  </h1>
-</>
+    <Routes>
+      <Route path='/' element={<Login/>}/>
+    </Routes>
 
   )
 }
