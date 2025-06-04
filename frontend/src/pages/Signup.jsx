@@ -1,58 +1,88 @@
-// src/pages/Signup.jsx
-import React from 'react';
+import { useState } from 'react';
+import axios from 'axios';
 
 const Signup = () => {
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+    setSuccess('');
+
+    try {
+      await axios.post('http://localhost:5000/api/auth/register', {
+        name,
+        email,
+        password,
+      });
+
+      setSuccess('Account created successfully. You can now log in.');
+      setName('');
+      setEmail('');
+      setPassword('');
+    } catch (err) {
+      const msg =
+        err.response?.data?.message || 'Something went wrong. Please try again.';
+      setError(msg);
+    }
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-green-50">
-      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-green-600 mb-6">
-          Create your account
+    <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
+      <div className="max-w-md w-full bg-white rounded-2xl shadow-lg p-8">
+        <h2 className="text-2xl font-bold text-green-600 mb-6 text-center">
+          Create your Farmer Account
         </h2>
 
-        <form className="space-y-4">
-          <div>
-            <label className="block mb-1 text-gray-700 font-semibold">Name</label>
-            <input
-              type="text"
-              placeholder="Enter your name"
-              className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
+        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+        {success && <p className="text-green-600 text-sm mb-2">{success}</p>}
 
-          <div>
-            <label className="block mb-1 text-gray-700 font-semibold">Email</label>
-            <input
-              type="email"
-              placeholder="Enter your email"
-              className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Full Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
 
-          <div>
-            <label className="block mb-1 text-gray-700 font-semibold">Password</label>
-            <input
-              type="password"
-              placeholder="Create a password"
-              className="w-full px-4 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="Email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Create a password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            required
+          />
 
           <button
             type="submit"
-            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300"
+            className="w-full bg-green-600 hover:bg-green-700 text-white py-2 rounded-lg transition duration-300"
           >
             Sign Up
           </button>
-
-          <div className="text-center mt-4">
-            <p className="text-sm text-gray-600">
-              Already have an account?
-              <a href="/login" className="text-green-700 font-semibold hover:underline ml-1">
-                Log in
-              </a>
-            </p>
-          </div>
         </form>
+
+        <p className="text-sm text-center mt-4">
+          Already have an account?{' '}
+          <a href="/login" className="text-green-600 font-semibold hover:underline">
+            Login here
+          </a>
+        </p>
       </div>
     </div>
   );
