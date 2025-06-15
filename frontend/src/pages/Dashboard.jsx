@@ -1,14 +1,34 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const user = JSON.parse(localStorage.getItem('user'));
+  const navigate = useNavigate();
+
+const handleLogout = () => {
+const confirmLogout = window.confirm('Are you sure you want to logout?');
+  if (confirmLogout) {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    navigate('/');
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-green-50">
       <header className="bg-green-600 text-white py-4 shadow-md">
         <div className="max-w-6xl mx-auto px-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">🌿 Farmer Dashboard</h1>
-          <div>Welcome, {user?.name || 'Farmer'}!</div>
+          <div className="flex items-center gap-4">
+            <span>Welcome, {user?.name || 'Farmer'}!</span>
+            <button
+              onClick={handleLogout}
+              className="bg-white text-green-700 px-4 py-1 rounded-lg text-sm font-semibold hover:bg-green-100 transition"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </header>
 
